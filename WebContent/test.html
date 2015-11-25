@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple click event</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+
+  </head>
+  <body>
+
+      <div>
+       <img src="img/logo_bouy.png" alt="logo" id="dres-logo" title="logo">
+      </div>
+    <form onsubmit="return false">
+      <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    </form>
+    <div id="map"></div>
+    <script>
+
+function initMap() {
+  var myLatlng = {lat: 51.524, lng: -0.077};
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 18,
+    center: myLatlng
+  });
+
+  drawPolygon(map);
+
+  var marker = new google.maps.Marker({
+    position: myLatlng,
+    map: map,
+    title: 'Click to zoom'
+  });
+
+  marker.addListener('click', function() {
+    document.location.href="http://silvestrix.org/WebContent/floorplan.php";
+  });
+
+  var input = document.getElementById('pac-input');
+  var searchBox = new google.maps.places.SearchBox(input);
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  searchBox.addListener('submit', function(){
+    alert("hi");
+  });
+  
+  map.addListener('bounds_changed', function() {
+    searchBox.setBounds(map.getBounds());
+  });
+}
+
+function drawPolygon(map){
+var buildingcoords = [
+    new google.maps.LatLng(51.523758, -0.077035),
+    new google.maps.LatLng(51.524233, -0.077007),
+    new google.maps.LatLng(51.524248, -0.076601),
+    new google.maps.LatLng(51.523737, -0.076553)
+  ];
+
+  building = new google.maps.Polygon({
+    paths: [buildingcoords],
+    strokeColor: "#be2b39",
+    strokeOpacity: 0.3,
+    strokeWeight: 1,
+    fillColor: "#be2b39",
+    fillOpacity: 0.3
+  });
+
+  building.setMap(map);
+
+  google.maps.event.addListener(building, 'click', function (event) {
+    document.location.href="http://silvestrix.org/WebContent/floorplan.php";
+  });  
+}
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZkcdOaEwWZjBi70ReK-88Jv6Ab0C9mpQ&signed_in=true&callback=initMap&libraries=places" async defer>
+    </script>
+  </body>
+</html>
