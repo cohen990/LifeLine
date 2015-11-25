@@ -1,0 +1,40 @@
+<html>
+	<head>
+	</head>
+	<body>
+	<span id="floorplan"></span>
+	</body>
+
+<style>
+	body{
+		margin:0 !important;
+	}
+</style>
+
+<script>
+var scaleFactor = $("#floorplan").outerHeight() / 9280;
+var pushToMap = function(top, left, saturation, id){
+	$("#" + id).remove();
+	$("#floorplan").append("<span class='pointer' id='"+ id + "' style='top:" + (top * scaleFactor) + "px; left:" + (left * scaleFactor) + "px; -webkit-filter: grayscale(" + saturation + "%);-moz-filter: grayscale(" + saturation + "%);filter: grayscale(" + saturation + "%);-ms-filter: grayscale(" + saturation + "%);filter: grayscale(" + saturation + "%);-o-filter: grayscale(" + saturation + "%);filter: grayscale(" + saturation + "%);'></span>");
+}
+
+function callback(data){
+	console.log(data);
+	data = JSON.parse(data);
+	for(var i = 0; i < data.length; i++){
+		var id = data[i].phone_id;
+		var left = data[i].pos_x;
+		var top = data[i].pos_y;
+		var saturation = data[i].saturation;
+		pushToMap(top, left, saturation, id);
+	}
+	window.setTimeout(getAll, 1000);
+}
+
+function getAll(){$.get("http://silvestrix.org/webapi/getall.php", callback);}
+
+$(document).ready(function(){
+	getAll();
+});
+</script>
+</html>
